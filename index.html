@@ -1,1 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Interview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', 'Montserrat', sans-serif;
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: #333;
+            overflow: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            height: 100vh;
+            padding: 20px;
+            animation: fadeInUp 0.8s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Setup Section */
+        .setup-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .main-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .webcam-container {
+            position: relative;
+            width: 200px;
+            height: 150px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: #f8f9fa;
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+                transform: scale(1);
+            }
+            100% {
+                box-shadow: 0 20px 40px rgba(102, 126, 234, 0.6);
+                transform: scale(1.02);
+            }
+        }
+
+        .webcam-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .webcam-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #666;
+            font-size: 1rem;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .webcam-status {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #e9ecef;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Upload Area Styles */
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .upload-area {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            color: #333;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            border: 2px dashed #dee2e6;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .file-input-label:hover {
+            background: rgba(233, 236, 239, 0.9);
+            border-color: #007BFF;
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
+        }
+
+
+
+        /* Interview Page - Full Screen */
+        .interview-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: 2000;
+            animation: slideInUp 0.5s ease-out;
+            position: relative;
+        }
+
+        /* Video Corner - Top Right */
+        .video-corner {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: slideInRight 0.8s ease-out 0.2s both;
+        }
+
+        .video-container {
+            width: 200px;
+            height: 150px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: #f8f9fa;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .webcam-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+
+        .webcam-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #666;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .video-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-indicator {
+            color: #28a745;
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Chat Interface */
+        .chat-interface {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            animation: slideInUp 0.8s ease-out 0.4s both;
+            height: calc(100vh - 40px);
+            width: calc(100% - 40px);
+            margin: 20px;
+            border-top: 3px solid #ff6b9d;
+        }
+
+        .close-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .chat-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+
+
+        .chat-container {
+            flex: 1;
+            padding: 20px 30px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.ai {
+            justify-content: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            animation: messageSlideIn 0.3s ease-out;
+            transform-origin: bottom;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .message.ai .message-bubble {
+            background: #007BFF;
+            color: white;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user .message-bubble {
+            background: #6C757D;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-input-area {
+            padding: 20px 30px;
+            border-top: 1px solid #e9ecef;
+            background: white;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .input-container textarea {
+            flex: 1;
+            resize: none;
+            border-radius: 20px;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            font-size: 16px;
+            font-family: inherit;
+            min-height: 50px;
+            max-height: 120px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        .input-container textarea:focus {
+            outline: none;
+            border-color: #007BFF;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+            transform: scale(1.02);
+        }
+
+        .input-container textarea:hover {
+            border-color: #007BFF;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+        }
+
+        .send-btn {
+            background: linear-gradient(45deg, #007BFF, #0056b3);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .send-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .send-btn:hover::before {
+            left: 100%;
+        }
+
+        .send-btn:hover {
+            background: linear-gradient(45deg, #0056b3, #004085);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        .send-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Bottom Controls */
+        .bottom-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 1000;
+            animation: slideInUp 0.8s ease-out 0.6s both;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .control-btn:hover::before {
+            left: 100%;
+        }
+
+        .start-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .start-btn:hover {
+            background: linear-gradient(45deg, #218838, #1e7e34);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        .end-btn {
+            background: linear-gradient(45deg, #dc3545, #e74c3c);
+            color: white;
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .end-btn:hover {
+            background: linear-gradient(45deg, #c82333, #c0392b);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.4);
+        }
+
+        .metrics-container {
+            display: flex;
+            gap: 15px;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 8px 12px;
+            background: rgba(248, 249, 250, 0.8);
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            min-width: 80px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: metricPulse 2s ease-in-out infinite;
+        }
+
+        .metric:nth-child(1) { animation-delay: 0s; }
+        .metric:nth-child(2) { animation-delay: 0.5s; }
+        .metric:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes metricPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 2px 10px rgba(0, 123, 255, 0.1);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+            }
+        }
+
+        .metric-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #007BFF;
+            transition: all 0.3s ease;
+        }
+
+        .metric:hover .metric-value {
+            transform: scale(1.1);
+            color: #0056b3;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 2px;
+            transition: color 0.3s ease;
+        }
+
+        .metric:hover .metric-label {
+            color: #333;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007BFF;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .upload-area {
+                max-width: 90%;
+                padding: 20px;
+            }
+            
+            .video-corner {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .video-container {
+                width: 150px;
+                height: 112px;
+            }
+            
+            .chat-interface {
+                width: calc(100% - 20px);
+                margin: 10px;
+                height: calc(100vh - 20px);
+            }
+            
+            .metrics-container {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Setup Section -->
+        <div id="setupSection">
+            <div class="setup-content">
+                <h1 class="main-title">AI Interview Assistant</h1>
+                <p class="subtitle">Upload your resume and start your personalized interview</p>
+                
+                <div class="upload-area">
+                    <div class="file-input-wrapper">
+                        <input type="file" id="resumeFile" class="file-input" accept=".pdf" required>
+                        <label for="resumeFile" class="file-input-label">
+                            📄 Click to upload your resume (PDF only)
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="jobTitle">Job Role</label>
+                        <input type="text" id="jobTitle" placeholder="e.g., Software Engineer, Product Manager" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interview Section -->
+        <div id="interviewSection" class="hidden">
+            <!-- Full Screen Interview Page -->
+            <div class="interview-page">
+                <!-- Video Corner - Top Right -->
+                <div class="video-corner">
+                    <div class="video-container">
+                        <video id="webcamVideoInterview" class="webcam-video" autoplay muted></video>
+                        <div id="webcamPlaceholderInterview" class="webcam-placeholder">
+                            📹 Camera will activate when interview starts
+                        </div>
+                    </div>
+                    <div class="video-status">
+                        <span class="status-indicator">●</span>
+                        <span class="status-text">Live</span>
+                    </div>
+                </div>
+
+                <!-- Chat Interface -->
+                <div class="chat-interface">
+                    <div class="chat-header">
+                        <h1 class="chat-title">Live Interview</h1>
+                        <button class="close-btn" id="closeInterviewBtn">✕</button>
+                    </div>
+
+                    <div class="chat-container" id="chatContainer">
+                        <div class="message ai">
+                            <div class="message-bubble">
+                                Hello! I'm your AI interviewer. I've reviewed your resume and I'm ready to ask you some questions about your experience. Let's begin!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <div class="input-container">
+                            <textarea id="userInput" placeholder="Type your answer here..." rows="2"></textarea>
+                            <button class="send-btn" id="sendBtn">➤</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Controls -->
+    <div class="bottom-controls">
+        <button class="control-btn start-btn" id="startInterviewBtn">Start Interview</button>
+        
+        <div class="metrics-container">
+            <div class="metric">
+                <div class="metric-value" id="attentionValue">--</div>
+                <div class="metric-label">Attention%</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="positivityValue">--</div>
+                <div class="metric-label">Positivity</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value" id="confidenceValue">--</div>
+                <div class="metric-label">Confidence</div>
+            </div>
+        </div>
+        
+        <button class="control-btn end-btn" id="endInterviewBtn" disabled>End Interview</button>
+    </div>
+
+    <script>
+        // Sample interview questions
+        const interviewQuestions = [
+            "Can you walk me through your experience with the technologies mentioned in your resume?",
+            "Describe a challenging project you worked on and how you overcame obstacles.",
+            "How do you handle working in a team environment with different personalities?",
+            "What are your career goals for the next 3-5 years?",
+            "Why are you interested in this position and our company?"
+        ];
+
+        let currentQuestion = 0;
+        let stream = null;
+        let userAnswers = [];
+        let interviewActive = false;
+
+        // DOM elements
+        const setupSection = document.getElementById('setupSection');
+        const interviewSection = document.getElementById('interviewSection');
+        const startInterviewBtn = document.getElementById('startInterviewBtn');
+        const endInterviewBtn = document.getElementById('endInterviewBtn');
+        const closeInterviewBtn = document.getElementById('closeInterviewBtn');
+        const webcamVideoInterview = document.getElementById('webcamVideoInterview');
+        const webcamPlaceholderInterview = document.getElementById('webcamPlaceholderInterview');
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const attentionValue = document.getElementById('attentionValue');
+        const positivityValue = document.getElementById('positivityValue');
+        const confidenceValue = document.getElementById('confidenceValue');
+        const resumeFile = document.getElementById('resumeFile');
+        const jobTitle = document.getElementById('jobTitle');
+        const fileLabel = document.querySelector('.file-input-label');
+
+        // File input handling
+        resumeFile.addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || 'No file selected';
+            fileLabel.textContent = `📄 ${fileName}`;
+        });
+
+        // Start interview
+        startInterviewBtn.addEventListener('click', async function() {
+            if (interviewActive) return;
+            
+            // Validate form
+            const resumeFileValue = resumeFile.files[0];
+            const jobTitleValue = jobTitle.value.trim();
+            
+            if (!resumeFileValue || !jobTitleValue) {
+                alert('Please upload a resume and enter a job title.');
+                return;
+            }
+            
+            // Show loading state
+            startInterviewBtn.textContent = 'Starting...';
+            startInterviewBtn.disabled = true;
+            
+            // Start webcam
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    }, 
+                    audio: false 
+                });
+                
+                // Set up webcam for interview section
+                webcamVideoInterview.srcObject = stream;
+                webcamVideoInterview.style.display = 'block';
+                webcamPlaceholderInterview.style.display = 'none';
+                
+                // Set up webcam for interview
+                webcamVideoInterview.srcObject = stream;
+                webcamVideoInterview.style.display = 'block';
+                webcamPlaceholderInterview.style.display = 'none';
+                
+                // Switch to interview section
+                setupSection.classList.add('hidden');
+                interviewSection.classList.remove('hidden');
+                
+                // Start interview
+                interviewActive = true;
+                startInterviewBtn.textContent = 'Interview Active';
+                startInterviewBtn.style.background = '#6c757d';
+                endInterviewBtn.disabled = false;
+                
+                // Start metrics simulation
+                startMetricsSimulation();
+                
+                // Ask first question
+                setTimeout(() => {
+                    askNextQuestion();
+                }, 1000);
+                
+            } catch (error) {
+                console.error('Error accessing media devices:', error);
+                
+                // Continue without webcam
+                webcamPlaceholderInterview.textContent = '📹 Camera not available';
+                webcamPlaceholderInterview.style.color = '#dc3545';
+                
+                // Switch to interview section
+                setupSection.classList.add('hidden');
+                interviewSection.classList.remove('hidden');
+                
+                // Start interview anyway
+                interviewActive = true;
+                startInterviewBtn.textContent = 'Interview Active';
+                startInterviewBtn.style.background = '#6c757d';
+                endInterviewBtn.disabled = false;
+                
+                startMetricsSimulation();
+                setTimeout(() => {
+                    askNextQuestion();
+                }, 1000);
+            }
+        });
+
+        // End interview
+        endInterviewBtn.addEventListener('click', function() {
+            if (!interviewActive) return;
+            
+            // Stop webcam
+            stopWebcam();
+            
+            // Reset UI
+            interviewActive = false;
+            startInterviewBtn.textContent = 'Start Interview';
+            startInterviewBtn.disabled = false;
+            startInterviewBtn.style.background = '#28a745';
+            endInterviewBtn.disabled = true;
+            
+            // Reset webcam display
+            webcamVideoInterview.style.display = 'none';
+            webcamPlaceholderInterview.style.display = 'flex';
+            webcamPlaceholderInterview.textContent = '📹 Camera will activate when interview starts';
+            
+            // Stop metrics
+            if (window.metricsInterval) {
+                clearInterval(window.metricsInterval);
+            }
+            
+            // Add end message
+            addMessage("Interview ended. Thank you for your time!", 'ai');
+            
+            // Return to setup section
+            interviewSection.classList.add('hidden');
+            setupSection.classList.remove('hidden');
+        });
+
+        // Close interview (X button)
+        closeInterviewBtn.addEventListener('click', function() {
+            // Stop webcam
+            stopWebcam();
+            
+            // Reset UI
+            interviewActive = false;
+            startInterviewBtn.textContent = 'Start Interview';
+            startInterviewBtn.disabled = false;
+            startInterviewBtn.style.background = '#28a745';
+            endInterviewBtn.disabled = true;
+            
+            // Stop metrics
+            if (window.metricsInterval) {
+                clearInterval(window.metricsInterval);
+            }
+            
+            // Return to setup section
+            interviewSection.classList.add('hidden');
+            setupSection.classList.remove('hidden');
+        });
+
+        // Send message
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            if (!interviewActive) return;
+            
+            const message = userInput.value.trim();
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            userInput.value = '';
+            
+            // Store answer
+            userAnswers.push(message);
+            currentQuestion++;
+            
+            // Simulate AI processing
+            setTimeout(() => {
+                if (currentQuestion < interviewQuestions.length) {
+                    askNextQuestion();
+                } else {
+                    endInterview();
+                }
+            }, 1500);
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            bubbleDiv.textContent = text;
+            
+            messageDiv.appendChild(bubbleDiv);
+            chatContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function askNextQuestion() {
+            const question = interviewQuestions[currentQuestion];
+            addMessage(question, 'ai');
+        }
+
+        function endInterview() {
+            addMessage("Thank you for completing the interview! I'll analyze your responses and provide feedback.", 'ai');
+            
+            setTimeout(() => {
+                addMessage("Interview completed. Your responses have been recorded and analyzed.", 'ai');
+            }, 2000);
+        }
+
+        function startMetricsSimulation() {
+            // Simulate real-time metrics updates
+            window.metricsInterval = setInterval(() => {
+                const newAttention = Math.floor(Math.random() * 30) + 70;
+                const newPositivity = Math.floor(Math.random() * 40) + 60;
+                const newConfidence = Math.floor(Math.random() * 35) + 65;
+                
+                // Animate metric updates
+                animateMetricUpdate(attentionValue, newAttention);
+                animateMetricUpdate(positivityValue, newPositivity);
+                animateMetricUpdate(confidenceValue, newConfidence);
+            }, 2000);
+        }
+
+        function animateMetricUpdate(element, newValue) {
+            element.style.transform = 'scale(1.2)';
+            element.style.color = '#ff6b6b';
+            
+            setTimeout(() => {
+                element.textContent = newValue + '%';
+                element.style.transform = 'scale(1)';
+                element.style.color = '#007BFF';
+            }, 150);
+        }
+
+        function stopWebcam() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Focus on job title input initially
+            jobTitle.focus();
+            
+            // Clean up webcam when page is unloaded
+            window.addEventListener('beforeunload', stopWebcam);
+        });
+    </script>
+</body>
+</html>
 
